@@ -4,25 +4,55 @@
   <title>Mini Earning App</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
+
 <body style="text-align:center;font-family:sans-serif;">
 
-<h2>Mini Earning App</h2>
+<h2>Mini Earning App 💰</h2>
+
 <p id="user"></p>
 <p>Coins: <span id="coins">0</span></p>
 
 <button onclick="earn()">Tap & Earn</button>
+<br><br>
+
+<button onclick="invite()">Invite Friend</button>
+
+<p id="ref"></p>
 
 <script>
 const tg = Telegram.WebApp;
 tg.ready();
 
-let coins = 0;
+let coins = localStorage.getItem("coins") || 0;
+document.getElementById("coins").innerText = coins;
+
+let user = tg.initDataUnsafe.user;
+let userId = user?.id || Math.floor(Math.random()*100000);
+
 document.getElementById("user").innerText =
-  "Hello " + (tg.initDataUnsafe.user?.first_name || "User");
+  "Hello " + (user?.first_name || "User");
 
 function earn() {
   coins++;
+  localStorage.setItem("coins", coins);
   document.getElementById("coins").innerText = coins;
+}
+
+let params = new URLSearchParams(window.location.search);
+let ref = params.get("ref");
+
+if (ref && !localStorage.getItem("ref_used")) {
+  coins = parseInt(coins) + 10; // referral bonus
+  localStorage.setItem("coins", coins);
+  localStorage.setItem("ref_used", true);
+  document.getElementById("coins").innerText = coins;
+  document.getElementById("ref").innerText =
+    "Referral bonus +10 coins 🎉";
+}
+
+function invite() {
+  let link = `https://t.me/YOUR_BOT_USERNAME?start=${userId}`;
+  tg.openTelegramLink(link);
 }
 </script>
 
