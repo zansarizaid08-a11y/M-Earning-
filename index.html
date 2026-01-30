@@ -1,10 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Telegram Mini App</title>
+  <title>Mini Earning App</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
-<body>
-  <h2>Mini Earning App Live 🚀</h2>
-  <p>GitHub Pages is now working.</p>
+<body style="text-align:center;font-family:sans-serif;">
+
+<h2>Mini Earning App</h2>
+<p id="user"></p>
+<p>Coins: <span id="coins">0</span></p>
+
+<button onclick="earn()">Tap & Earn</button>
+
+<script>
+const tg = Telegram.WebApp;
+tg.ready();
+
+let coins = 0;
+document.getElementById("user").innerText =
+  "Hello " + (tg.initDataUnsafe.user?.first_name || "User");
+
+function earn() {
+  coins++;
+  document.getElementById("coins").innerText = coins;
+}
+</script>
+
 </body>
 </html>
